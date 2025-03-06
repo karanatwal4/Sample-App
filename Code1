@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <title>Magical Adventure</title>
+    <style>
+      /* Basic styling for a mobile-friendly interface */
+      body {
+        font-family: Arial, sans-serif;
+        background: #fce4ec;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        color: #555;
+      }
+      .container {
+        max-width: 600px;
+        width: 90%;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin: 20px;
+        padding: 20px;
+        text-align: center;
+      }
+      h1 {
+        color: #d81b60;
+      }
+      .scene-text {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+      }
+      .options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .option-button {
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #f06292;
+        color: white;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .option-button:hover {
+        background-color: #e91e63;
+      }
+      .restart-button {
+        margin-top: 20px;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #64b5f6;
+        color: white;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .restart-button:hover {
+        background-color: #42a5f5;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Magical Adventure</h1>
+      <div id="scene" class="scene-text"></div>
+      <div id="options" class="options"></div>
+    </div>
+    <script>
+      // Story structure: Each scene has a description and three options,
+      // except for ending scenes that have no further options.
+      const scenes = {
+        start: {
+          text: "Welcome to a magical adventure! You are a brave explorer in an enchanted land. Where would you like to go?",
+          options: [
+            { text: "Follow the glowing river", next: "ending_river" },
+            { text: "Climb the rainbow tree", next: "ending_tree" },
+            { text: "Enter the fairy's cave", next: "ending_cave" }
+          ]
+        },
+        ending_river: {
+          text: "You follow the glowing river and find a secret underwater garden filled with sparkling fish and singing water lilies. It's a magical sight!",
+          options: [] // End scene; no further choices.
+        },
+        ending_tree: {
+          text: "You climb the rainbow tree and discover a cozy nest high above the clouds where friendly birds sing sweet lullabies just for you. What a delightful view!",
+          options: []
+        },
+        ending_cave: {
+          text: "Inside the fairy's cave, twinkling lights and a kind fairy greet you with glittering wishes. The magic of the cave fills your heart with joy!",
+          options: []
+        }
+      };
+
+      let currentScene = "start";
+
+      // Render the current scene: update text and buttons.
+      function renderScene() {
+        const sceneData = scenes[currentScene];
+        const sceneDiv = document.getElementById("scene");
+        const optionsDiv = document.getElementById("options");
+
+        // Show the scene description.
+        sceneDiv.textContent = sceneData.text;
+        optionsDiv.innerHTML = "";
+
+        // If there are no options, then this is an end scene.
+        if (sceneData.options.length === 0) {
+          const restartButton = document.createElement("button");
+          restartButton.textContent = "Restart Adventure";
+          restartButton.className = "restart-button";
+          restartButton.onclick = () => {
+            currentScene = "start";
+            renderScene();
+          };
+          optionsDiv.appendChild(restartButton);
+        } else {
+          // Create a button for each option.
+          sceneData.options.forEach(option => {
+            const button = document.createElement("button");
+            button.textContent = option.text;
+            button.className = "option-button";
+            button.onclick = () => {
+              currentScene = option.next;
+              renderScene();
+            };
+            optionsDiv.appendChild(button);
+          });
+        }
+      }
+
+      // Initialize the adventure.
+      renderScene();
+    </script>
+  </body>
+</html>
